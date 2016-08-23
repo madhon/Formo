@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindTests.cs" />
+    <Compile Include="ConfigurationTestBase.cs" />
     <Compile Include="FormoTests_CustomSection.cs" />
     <Compile Include="FormoTests.cs" />
     <Compile Include="FormoTests_AppSettings.cs" />

@@ -8,8 +8,7 @@
         public void Can_get_ConnectionString_by_name()
         {
             var connString = configuration.ConnectionString.LocalConnection;
-
-            Assert.That(connString.ConnectionString, Is.EqualTo("localhost"));
+            connString.ConnectionString.ShouldBe("localhost");
         }
 
         [Test]
@@ -17,7 +16,7 @@
         {
             var connString = configuration.ConnectionString.BogusThingNotReal;
 
-            Assert.That(connString.ConnectionString, Is.Empty);
+            connString.ConnectionString.ShouldBe(string.Empty);
         }
     }
 }
