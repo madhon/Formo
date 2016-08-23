@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-
-namespace Formo.Tests
+﻿namespace Formo.Tests
 {
+    using NUnit.Framework;
+
     public class Formo_ConnectionString : ConfigurationTestBase
     {
         [Test]

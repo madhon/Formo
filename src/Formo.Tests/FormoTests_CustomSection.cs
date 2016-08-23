@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-
-namespace Formo.Tests
+﻿namespace Formo.Tests
 {
+    using NUnit.Framework;
+
     [TestFixture]
     public class When_forced_to_use_a_string_key_CustomSection : When_forced_to_use_a_string_key
     {

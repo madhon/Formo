@@ -1,10 +1,11 @@
-﻿using System;
-using System.Configuration;
-using NUnit.Framework;
-using Shouldly;
-
-namespace Formo.Tests
+﻿namespace Formo.Tests
 {
+    using System;
+    using System.Configuration;
+    using NUnit.Framework;
+    using Shouldly;
+    using Configuration = Formo.Configuration;
+
     public class WebsiteSettings
     {
         public string Herp { get; set; }

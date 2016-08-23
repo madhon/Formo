@@ -1,13 +1,14 @@
-﻿using System;
-using System.Configuration;
-using System.Globalization;
-using System.Linq;
-using Formo.Tests.TestModels;
-using NUnit.Framework;
-using Shouldly;
-
-namespace Formo.Tests
+﻿namespace Formo.Tests
 {
+    using System;
+    using System.Configuration;
+    using System.Globalization;
+    using System.Linq;
+    using Formo.Tests.TestModels;
+    using NUnit.Framework;
+    using Shouldly;
+    using Configuration = Formo.Configuration;
+
     public class When_forced_to_use_a_string_key : ConfigurationTestBase
     {
         public When_forced_to_use_a_string_key()
