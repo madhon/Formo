@@ -1,22 +1,23 @@
 ﻿namespace Formo.Tests
 {
-    using NUnit.Framework;
+    using Xunit;
+    using Shouldly;
 
     public class Formo_ConnectionString : ConfigurationTestBase
     {
-        [Test]
+        [Fact]
         public void Can_get_ConnectionString_by_name()
         {
             var connString = configuration.ConnectionString.LocalConnection;
-            connString.ConnectionString.ShouldBe("localhost");
+            connString.ConnectionString.ToString().ShouldBe("localhost");
         }
 
-        [Test]
+        [Fact]
         public void Should_get_null_if_ConnectionString_is_wrong()
         {
             var connString = configuration.ConnectionString.BogusThingNotReal;
 
-            connString.ConnectionString.ShouldBe(string.Empty);
+            connString.ConnectionString.ToString().ShouldBe(string.Empty);
         }
     }
 }

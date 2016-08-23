@@ -5,12 +5,12 @@ namespace Formo.Tests
 
     public class ConfigurationTestBase
     {
-        public ConfigurationTestBase(string sectionName, bool throwIfNull = false)
+        protected ConfigurationTestBase(string sectionName, bool throwIfNull = false)
         {
             configuration = new Configuration(sectionName, CultureInfo.InvariantCulture) { ThrowIfNull = throwIfNull };
         }
 
-        public ConfigurationTestBase(bool throwIfNull = false)
+        protected ConfigurationTestBase(bool throwIfNull = false)
         {
             configuration = new Configuration(CultureInfo.InvariantCulture) { ThrowIfNull = throwIfNull };
         }

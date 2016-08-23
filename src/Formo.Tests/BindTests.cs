@@ -2,8 +2,8 @@
 {
     using System;
     using System.Configuration;
-    using NUnit.Framework;
     using Shouldly;
+    using Xunit;
     using Configuration = Formo.Configuration;
 
     public class WebsiteSettings
@@ -16,12 +16,10 @@
         public ConnectionStringSettings LocalConnection { get; set; }
     }
 
-    [TestFixture]
     public class BindTests_Default : BindTests
     {
     }
 
-    [TestFixture]
     public class BindTests_AppSettings : BindTests
     {
         public BindTests_AppSettings() : base("appSetings")
@@ -29,7 +27,6 @@
         }
     }
 
-    [TestFixture]
     public class BindTests_CustomSection : BindTests
     {
         public BindTests_CustomSection() : base("customSection")
@@ -44,16 +41,12 @@
 
         public BindTests()
         {
+            configuration = new Configuration();
         }
 
         public BindTests(string sectionName)
         {
             _sectionName = sectionName;
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
             if (_sectionName == null)
             {
                 configuration = new Configuration();
@@ -64,7 +57,7 @@
             }
         }
 
-        [Test]
+        [Fact]
         public void Bind_should_assign_standalone_property_from_settings()
         {
             WebsiteSettings settings = new Configuration().Bind<WebsiteSettings>();
@@ -75,7 +68,7 @@
             settings.ExpirationDate.ShouldBe(new DateTime(2011, 4, 16));
         }
 
-        [Test]
+        [Fact]
         public void Bind_should_assign_values_to_connection_strings()
         {
             WebsiteSettings settings = new Configuration().Bind<WebsiteSettings>();
@@ -83,7 +76,7 @@
             settings.LocalConnection.ShouldNotBe(null);
         }
         
-        [Test]
+        [Fact]
         public void Bind_should_assign_correct_values_to_connection_strings()
         {
             WebsiteSettings settings = new Configuration().Bind<WebsiteSettings>();
@@ -91,7 +84,7 @@
             settings.LocalConnection.ConnectionString.ShouldBe(@"localhost");
         }
 
-        [Test]
+        [Fact]
         public void Bind_should_assign_correct_values_to_provider_names()
         {
             WebsiteSettings settings = new Configuration().Bind<WebsiteSettings>();
