@@ -68,8 +68,8 @@ namespace Formo.Tests
         {
             WebsiteSettings settings = new Configuration().Bind<WebsiteSettings>();
 
-            settings.Herp.ShouldBe("herp", Case.Sensitive);
-            settings.Derp.ShouldBe("derp", Case.Sensitive);
+            settings.Herp.ShouldBe("herp", StringCompareShould.IgnoreCase);
+            settings.Derp.ShouldBe("derp", StringCompareShould.IgnoreCase);
             settings.SomeInteger.ShouldBe(123);
             settings.ExpirationDate.ShouldBe(new DateTime(2011, 4, 16));
         }
