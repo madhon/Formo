@@ -1,8 +1,8 @@
-using System.Configuration;
-using System.Dynamic;
-
 namespace Formo
 {
+    using System.Configuration;
+    using System.Dynamic;
+
     internal class ConnectionStringsConfiguration : DynamicObject
     {
         private readonly ConnectionStringSettingsCollection _connectionStrings;
@@ -12,10 +12,7 @@ namespace Formo
             _connectionStrings = connectionStrings;
         }
 
-        public ConnectionStringSettings Get(string key)
-        {
-            return _connectionStrings[key];
-        }
+        public ConnectionStringSettings Get(string key) => _connectionStrings[key];
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {

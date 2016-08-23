@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Configuration;
-using System.Dynamic;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-
-namespace Formo
+﻿namespace Formo
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Configuration;
+    using System.Dynamic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+
     public class Configuration : DynamicObject
     {
         private const string AppSettingsSectionName = "appSettings";
@@ -54,10 +54,14 @@ namespace Formo
         internal object ConvertValue(Type destinationType, object value)
         {
             if (value == null)
+            {
                 return null;
+            }
 
-            if(destinationType.IsInstanceOfType(value))
+            if (destinationType.IsInstanceOfType(value))
+            {
                 return value;
+            }
 
             var typeConverter = TypeDescriptor.GetConverter(destinationType);
             if (typeConverter.CanConvertFrom(value.GetType()))
@@ -79,26 +83,18 @@ namespace Formo
             if (converter != null)
                 return converter.ConvertFrom(null, _cultureInfo, value);
 
-            var optionalMessage = "This is most likely because a TypeConverter hasn't been " +
-                                  "defined for the type '{0}'.".FormatWith(destinationType);
+            var optionalMessage = $"This is most likely because a TypeConverter hasn't been defined for the type '{destinationType}'.";
 
             throw ThrowHelper.FailedCast(destinationType, value, optionalMessage);
         }
 
-        public object Get(string key)
-        {
-            return GetValue(key);
-        }
+        public object Get(string key) => GetValue(key);
 
-        public T Get<T>(string key)
-        {
-            return (T) ConvertValue(typeof (T), Get(key));
-        }
+        public T Get<T>(string key) => (T) ConvertValue(typeof (T), Get(key));
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             result = GetValue(binder.Name);
-
             return true;
         }
 
@@ -114,7 +110,7 @@ namespace Formo
             }
             catch (FormatException ex)
             {
-                var message = "Could not obtain value '{0}' from configuration file".FormatWith(binder.Name);
+                var message = $"Could not obtain value '{binder.Name}' from configuration file";
                 throw ThrowHelper.FailedCast(generic, value, message, ex);
             }
 
@@ -135,7 +131,7 @@ namespace Formo
 
             if(ThrowIfNull && value == null)
             {
-                throw new InvalidOperationException("Unable to locate a value for '{0}' from configuration file".FormatWith(name));
+                throw new InvalidOperationException($"Unable to locate a value for '{name}' from configuration file");
             }
 
             return value;
@@ -176,12 +172,6 @@ namespace Formo
             }
         }
 
-        public dynamic ConnectionString
-        {
-            get
-            {
-                return _connectionStringsConfiguration;
-            }
-        }
+        public dynamic ConnectionString => _connectionStringsConfiguration;
     }
 }

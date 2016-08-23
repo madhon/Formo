@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reflection;
-
-namespace Formo
+﻿namespace Formo
 {
+    using System.Configuration;
+    using System.Linq;
+    using System.Reflection;
+
     internal class SettingsBinder
     {
         internal T WithSettings<T>(T instance, Configuration configuration)
