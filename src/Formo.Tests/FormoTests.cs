@@ -326,12 +326,12 @@ namespace Formo.Tests
     {
         public ConfigurationTestBase(string sectionName, bool throwIfNull = false)
         {
-            configuration = new Configuration(sectionName) { ThrowIfNull = throwIfNull };
+            configuration = new Configuration(sectionName, CultureInfo.InvariantCulture) { ThrowIfNull = throwIfNull };
         }
 
         public ConfigurationTestBase(bool throwIfNull = false)
         {
-            configuration = new Configuration { ThrowIfNull = throwIfNull };
+            configuration = new Configuration(CultureInfo.InvariantCulture) { ThrowIfNull = throwIfNull };
         }
 
         protected readonly dynamic configuration;
