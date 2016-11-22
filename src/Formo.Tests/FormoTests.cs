@@ -35,289 +35,276 @@
         }
     }
 
-    //public class When_using_typed_configuration_values : ConfigurationTestBase
-    //{
-    //    private dynamic germanConfiguration;
-    //    private readonly string _sectionName;
-    //    public When_using_typed_configuration_values()
-    //    {
-            
-    //    }
-    //    public When_using_typed_configuration_values(string sectionName)
-    //        : base(sectionName)
-    //    {
-    //        _sectionName = sectionName;
-    //    }
+    public class When_using_typed_configuration_values : ConfigurationTestBase
+    {
+        private dynamic germanConfiguration;
+        private readonly string _sectionName;
+        public When_using_typed_configuration_values()
+        {
 
-    //    [SetUp]
-    //    public void SetUp()
-    //    {
-    //        germanConfiguration = new Configuration(_sectionName, new CultureInfo("de"));
-    //    }
+        }
+        public When_using_typed_configuration_values(string sectionName)
+            : base(sectionName)
+        {
+            germanConfiguration = new Configuration(_sectionName, new CultureInfo("de"));
+            _sectionName = sectionName;
+        }
 
-    //    [Fact]
-    //    public void Method_should_convert_to_int()
-    //    {
-    //        var actual = configuration.NumberOfRetries<int>();
+        [Fact]
+        public void Method_should_convert_to_int()
+        {
+            var actual = configuration.NumberOfRetries<int>();
+            actual.ShouldBe(12);
+        }
 
-    //        Assert.That(actual, Is.EqualTo(12));
-    //    }
+        [Fact]
+        public void Method_should_convert_to_decimal()
+        {
+            var actual = configuration.AcceptableFailurePercentage<decimal>();
+            actual.ShouldBe(1.05);
+        }
 
-    //    [Fact]
-    //    public void Method_should_convert_to_decimal()
-    //    {
-    //        var actual = configuration.AcceptableFailurePercentage<decimal>();
+        [Fact]
+        public void Method_should_convert_to_DateTime()
+        {
+            var actual = configuration.ApplicationBuildDate<DateTime>();
+            actual.ShouldBe(new DateTime(1999, 11, 4, 6, 23, 0));
+        }
 
-    //        Assert.That(actual, Is.EqualTo(1.05));
-    //    }
+        [Fact]
+        public void Method_should_convert_to_DateTime_of_ConfiguredCulture()
+        {
+            var actual = germanConfiguration.GermanDate<DateTime>();
+            actual.ShouldBe(new DateTime(2002, 1, 22));
+        }
 
-    //    [Fact]
-    //    public void Method_should_convert_to_DateTime()
-    //    {
-    //        var actual = configuration.ApplicationBuildDate<DateTime>();
+        [Fact]
+        public void Method_should_convert_to_bool()
+        {
+            var actual = configuration.IsLoggingEnabled<bool>();
+            actual.ShouldBe(true);
+        }
 
-    //        Assert.That(actual, Is.EqualTo(new DateTime(1999, 11, 4, 6, 23, 0)));
-    //    }
+        [Fact]
+        public void Should_throw_nice_exception_when_could_not_parse()
+        {
+            var ex = Should.Throw<InvalidCastException>(() => configuration.NonParsableInt<Int32>());
 
-    //    [Fact]
-    //    public void Method_should_convert_to_DateTime_of_ConfiguredCulture()
-    //    {
-    //        var actual = germanConfiguration.GermanDate<DateTime>();
+            ex.Message.ShouldBe("Unable to cast setting value 'NOT_AN_INT' to 'System.Int32'" + Environment.NewLine +
+                "> Could not obtain value 'NonParsableInt' from configuration file" + Environment.NewLine);
+        }
+    }
 
-    //        Assert.That(actual, Is.EqualTo(new DateTime(2002, 1, 22)));
-    //    }
+    public class When_key_is_in_configuration_file : ConfigurationTestBase
+    {
+        public When_key_is_in_configuration_file()
+        {
 
-    //    [Fact]
-    //    public void Method_should_convert_to_bool()
-    //    {
-    //        var actual = configuration.IsLoggingEnabled<bool>();
+        }
+        public When_key_is_in_configuration_file(string sectionName)
+            : base(sectionName)
+        {
+        }
 
-    //        Assert.That(actual, Is.EqualTo(true));
-    //    }
+        [Fact]
+        public void Property_should_return_expected_value()
+        {
+            configuration.ApiKey.ShouldBe("a0c5837ebb094b578b436f03121bb022");
+        }
 
-    //    [Fact]
-    //    public void Should_throw_nice_exception_when_could_not_parse()
-    //    {
-    //        var ex = Assert.Throws<InvalidCastException>(() => configuration.NonParsableInt<Int32>());
+        [Fact]
+        public void Method_should_return_expected_value()
+        {
+            configuration.ApiKey().ShouldBe("a0c5837ebb094b578b436f03121bb022");
+        }
 
-    //        Assert.That(ex.Message, Is.EqualTo(
-    //            "Unable to cast setting value 'NOT_AN_INT' to 'System.Int32'" + Environment.NewLine +
-    //            "> Could not obtain value 'NonParsableInt' from configuration file" + Environment.NewLine));
-    //    }
-    //}
+        [Fact]
+        public void Method_should_ignore_defaults()
+        {
+            var actual = configuration.ApiKey("defaultvalue");
+            actual.ShouldNotBe("defaultvalue");
+        }
 
-    //public class When_key_is_in_configuration_file : ConfigurationTestBase
-    //{
-    //    public When_key_is_in_configuration_file()
-    //    {
-            
-    //    }
-    //    public When_key_is_in_configuration_file(string sectionName)
-    //        : base(sectionName)
-    //    {
-    //    }
+        [Fact]
+        public void Method_should_ignore_many_defaults()
+        {
+            var actual = configuration.ApiKey("test", "another");
+            actual.ShouldNotBe("test");
+            actual.ShouldNotBe("another");
+        }
+    }
 
-    //    [Fact]
-    //    public void Property_should_return_expected_value()
-    //    {
-    //        Assert.AreEqual("a0c5837ebb094b578b436f03121bb022", configuration.ApiKey);
-    //    }
+    public class When_key_isnt_in_configuration_file : ConfigurationTestBase
+    {
+        public When_key_isnt_in_configuration_file()
+            : base(false)
+        {
 
-    //    [Fact]
-    //    public void Method_should_return_expected_value()
-    //    {
-    //        Assert.AreEqual("a0c5837ebb094b578b436f03121bb022", configuration.ApiKey());
-    //    }
+        }
 
-    //    [Fact]
-    //    public void Method_should_ignore_defaults()
-    //    {
-    //        var actual = configuration.ApiKey("defaultvalue");
-    //        Assert.AreNotEqual("defaultvalue", actual);
-    //    }
+        protected When_key_isnt_in_configuration_file(string sectionName, bool throwIfNull)
+            : base(sectionName, throwIfNull)
+        {
+        }
 
-    //    [Fact]
-    //    public void Method_should_ignore_many_defaults()
-    //    {
-    //        var actual = configuration.ApiKey("test", "another");
-    //        Assert.AreNotEqual("test", actual);
-    //        Assert.AreNotEqual("another", actual);
-    //    }
-    //}
+        //[Fact]
+        //public void Method_with_many_params_should_return_first_non_null()
+        //{
+        //    string first = null;
+        //    var second = default(string);
+        //    var third = "i exist";
+        //    third.ShouldBeSameAs(third, configuration.Missing(first, second, third));
+        //    Assert.AreEqual(third, configuration.Missing(first, second, third));
+        //}
 
-    //public class When_key_isnt_in_configuration_file : ConfigurationTestBase
-    //{
-    //    public When_key_isnt_in_configuration_file()
-    //        :base(false)
-    //    {
-            
-    //    }
+        [Fact]
+        public void Method_looking_for_bool_should_behave_as_ConfigurationManager()
+        {
+            var key = "IsSettingMissing";
+            var expected = ConfigurationManager.AppSettings[key];
+            var actual = configuration.IsSettingMissing<bool>();
+            actual.ShouldBe(expected);
+        }
 
-    //    protected When_key_isnt_in_configuration_file(string sectionName, bool throwIfNull)
-    //        :base(sectionName, throwIfNull)
-    //    {
-    //    }
+        //[Fact]
+        //public void Method_with_param_should_return_first()
+        //{
+        //    "blargh".ShouldBe("");
+        //    Assert.AreEqual("blargh", configuration.Missing("blargh"));
+        //}
+    }
 
-    //    [Fact]
-    //    public void Method_with_many_params_should_return_first_non_null()
-    //    {
-    //        string first = null;
-    //        var second = default(string);
-    //        var third = "i exist";
-    //        Assert.AreEqual(third, configuration.Missing(first, second, third));
-    //    }
+    public class When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_false : ConfigurationTestBase
+    {
+        public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_false()
+            : base(false)
+        {
 
-    //    [Fact]
-    //    public void Method_looking_for_bool_should_behave_as_ConfigurationManager()
-    //    {
-    //        var key = "IsSettingMissing";
-    //        var expected = ConfigurationManager.AppSettings[key];
-    //        var actual = configuration.IsSettingMissing<bool>();
+        }
+        public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_false(string sectionName)
+            : base(sectionName, false)
+        {
+        }
 
-    //        Assert.AreSame(expected, actual);
-    //    }
+        [Fact]
+        public void Property_should_be_null()
+        {
+            Assert.Null(configuration.Missing);
+        }
 
-    //    [Fact]
-    //    public void Method_with_param_should_return_first()
-    //    {
-    //        Assert.AreEqual("blargh", configuration.Missing("blargh"));
-    //    }
-    //}
+        [Fact]
+        public void Method_should_be_null()
+        {
+            Assert.Null(configuration.Misssing());
+        }
 
-    //public class When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_false : ConfigurationTestBase
-    //{
-    //    public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_false()
-    //        :base(false)
-    //    {
-            
-    //    }
-    //    public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_false(string sectionName)
-    //        : base(sectionName, false)
-    //    {
-    //    }
+    }
 
-    //    [Fact]
-    //    public void Property_should_be_null()
-    //    {
-    //        Assert.Null(configuration.Missing);
-    //    }
+    public class When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_true : ConfigurationTestBase
+    {
+        public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_true()
+            : base(true)
+        {
 
-    //    [Fact]
-    //    public void Method_should_be_null()
-    //    {
-    //        Assert.Null(configuration.Misssing());
-    //    }
+        }
+        public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_true(string sectionName)
+            : base(sectionName, true)
+        {
+        }
 
-    //}
+        [Fact]
+        public void Property_should_throw_NullReferenceException()
+        {
+            var missing = default(dynamic);
+            var ex = Should.Throw<InvalidOperationException>(() => missing = configuration.Missing);
+            missing.ShouldBeNull();
+            ex.Message.ShouldBe("Unable to locate a value for 'Missing' from configuration file");
+        }
 
-    //public class When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_true : ConfigurationTestBase
-    //{
-    //    public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_true()
-    //        :base(true)
-    //    {
+        [Fact]
+        public void Method_should_be_null()
+        {
+            var missing = default(dynamic);
+            var ex = Should.Throw<InvalidOperationException>(() => missing = configuration.Missing);
 
-    //    }
-    //    public When_key_isnt_in_configuration_file_and_ThrowIfNull_set_to_true(string sectionName)
-    //        : base(sectionName, true)
-    //    {
-    //    }
+            missing.ShouldBeNull();
+            ex.Message.ShouldBe("Unable to locate a value for 'Missing' from configuration file");
+        }
 
-    //    [Fact]
-    //    public void Property_should_throw_NullReferenceException()
-    //    {
-    //        var missing = default(dynamic);
-    //        var ex = Assert.Throws<InvalidOperationException>(() => missing = configuration.Missing);
+    }
 
-    //        Assert.Null(missing);
-    //        Assert.That(ex.Message, Is.EqualTo("Unable to locate a value for 'Missing' from configuration file"));
-    //    }
+    public class When_getting_a_collection_from_missing_custom_section : ConfigurationTestBase
+    {
+        public When_getting_a_collection_from_missing_custom_section()
+            : base("bindAllSection")
+        {
+        }
 
-    //    [Fact]
-    //    public void Method_should_be_null()
-    //    {
-    //        var missing = default(dynamic);
-    //        var ex = Assert.Throws<InvalidOperationException>(() => missing = configuration.Missing());
+        [InlineData(101, "Chris")]
+        [InlineData(102, "Marisol")]
+        [InlineData(103, "Allison")]
+        [InlineData(104, "Ryan")]
+        [InlineData(105, "Ben")]
+        [InlineData(106, "Laurie")]
+        [InlineData(107, "Paige")]
+        [InlineData(108, "Nitya")]
+        [Fact]
+        public void BindPairs_should_return_a_collection_of_Users_with_properties_set(int id, string name)
+        {
+            var config = (Configuration)configuration;
+            var collection = config.BindPairs<User, int, string>(x => x.ID, x => x.Name).ToArray();
 
-    //        Assert.Null(missing);
-    //        Assert.That(ex.Message, Is.EqualTo("Unable to locate a value for 'Missing' from configuration file"));
-    //    }
-        
-    //}
+            collection.Count().ShouldBe(8);
+            collection.First(x => x.ID == id).Name.ShouldBe(name);
+        }
+    }
 
-    //[TestFixture]
-    //public class When_getting_a_collection_from_missing_custom_section : ConfigurationTestBase
-    //{
-    //    public When_getting_a_collection_from_missing_custom_section()
-    //        : base("bindAllSection")
-    //    {
-    //    }
+    public class When_key_isnt_in_conguration : ConfigurationTestBase
+    {
+        [Fact]
+        public void Method_with_string_argument_should_use_argument()
+        {
+            bool unspecified = configuration.NonExisting<bool>("true");
+            unspecified.ShouldBe(true);
+        }
 
-    //    [TestCase(101, "Chris")]
-    //    [TestCase(102, "Marisol")]
-    //    [TestCase(103, "Allison")]
-    //    [TestCase(104, "Ryan")]
-    //    [TestCase(105, "Ben")]
-    //    [TestCase(106, "Laurie")]
-    //    [TestCase(107, "Paige")]
-    //    [TestCase(108, "Nitya")]
-    //    public void BindPairs_should_return_a_collection_of_Users_with_properties_set(int id, string name)
-    //    {
-    //        var config = (Configuration) configuration;
-    //        var collection = config.BindPairs<User, int, string>(x => x.ID, x => x.Name).ToArray();
+        [Fact]
+        public void Method_with_same_type_bool_argument_should_use_argument()
+        {
+            bool unspecified = configuration.NonExisting<bool>(true);
 
-    //        collection.Count().ShouldBe(8);
-    //        collection.First(x => x.ID == id).Name.ShouldBe(name);
-    //    }
-    //}
+            unspecified.ShouldBe(true);
+        }
 
-    //[TestFixture]
-    //public class When_key_isnt_in_conguration : ConfigurationTestBase
-    //{ 
-    //    [Fact]
-    //    public void Method_with_string_argument_should_use_argument()
-    //    {
-    //        bool unspecified = configuration.NonExisting<bool>("true");
+        [Fact]
+        public void Method_with_same_type_date_argument_should_use_default_argument()
+        {
+            DateTime unspecified = configuration.NonExisting<DateTime>(new DateTime(2014, 2, 10));
 
-    //        Assert.That(unspecified, Is.True);
-    //    }
-        
-    //    [Fact]
-    //    public void Method_with_same_type_bool_argument_should_use_argument()
-    //    {
-    //        bool unspecified = configuration.NonExisting<bool>(true);
+            unspecified.ShouldBe(new DateTime(2014, 2, 10));
+        }
 
-    //        Assert.That(unspecified, Is.True);
-    //    }
-        
-    //    [Fact]
-    //    public void Method_with_same_type_date_argument_should_use_default_argument()
-    //    {
-    //        DateTime unspecified = configuration.NonExisting<DateTime>(new DateTime(2014, 2, 10));
+        [Fact]
+        public void Method_with_inheritance_default_argument_should_use_it()
+        {
+            var instance = new TestImplementation();
 
-    //        Assert.That(unspecified, Is.EqualTo(new DateTime(2014, 2, 10)));
-    //    }
+            ITest unspecified = configuration.NonExisting<ITest>(instance);
 
-    //    [Fact]
-    //    public void Method_with_inheritance_default_argument_should_use_it()
-    //    {
-    //        var instance = new TestImplementation();
+            unspecified.ShouldBeSameAs(instance);
+        }
 
-    //        ITest unspecified = configuration.NonExisting<ITest>(instance);
+        private interface ITest
+        {
+            void Test();
+        }
 
-    //        Assert.That(unspecified, Is.EqualTo(instance));
-    //    }
-
-    //    public interface ITest
-    //    {
-    //        void Test();
-    //    }
-
-    //    public class TestImplementation : ITest
-    //    {
-    //        public void Test()
-    //        {
-    //            Console.WriteLine("Testing");
-    //        }
-    //    }
-    //}
+        private class TestImplementation : ITest
+        {
+            public void Test()
+            {
+                Console.WriteLine("Testing");
+            }
+        }
+    }
 }
