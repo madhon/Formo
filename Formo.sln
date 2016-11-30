@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formo", "Formo\Formo.csproj", "{4FC4675D-1050-424F-A76D-96B43E847362}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{A6E1BFF6-6823-41DF-A138-A8C3B2A9C142}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formo.Tests", "Formo.Tests\Formo.Tests.csproj", "{4C1FDCEF-70C8-422B-8CD3-B245592585D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formo", "src\Formo\Formo.csproj", "{4FC4675D-1050-424F-A76D-96B43E847362}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formo.Cloud", "Formo.Cloud\Formo.Cloud.csproj", "{8353561E-FF8D-487C-8E9E-F3B9521BB08A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formo.Tests", "src\Formo.Tests\Formo.Tests.csproj", "{4C1FDCEF-70C8-422B-8CD3-B245592585D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formo.Cloud", "src\Formo.Cloud\Formo.Cloud.csproj", "{8353561E-FF8D-487C-8E9E-F3B9521BB08A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
