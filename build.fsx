@@ -34,7 +34,7 @@ Target "All" DoNothing
 
 "Clean"
   ==> "Compile"
-  ==> "XUnitTest"
+  =?> ("xUnitTest",hasBuildParam "xUnitTest") 
 
 // start build
 RunTargetOrDefault "XUnitTest"
